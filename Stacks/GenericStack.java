@@ -26,6 +26,6 @@ public class GenericStack<Item> {
   }
 
   public Item peek() {
-    return fist.item;
+    return first.item;
   }
 }
