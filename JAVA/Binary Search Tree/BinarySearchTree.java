@@ -126,6 +126,15 @@ public class BinarySearchTree<Item> {
         }
     }
 
+    public void nodeHeight(int k, Item data) {
+        if(contains(k, data)) {
+            System.out.println(nodeHeight(getNode(k, data)));
+        }
+        else {
+            System.out.println("Node with key: "+k+" doesn't exist in the tree");
+        }
+    }
+
     public void addItem(int k, Item e) {
         if(contains(k, e))
             throw new IllegalArgumentException("Node repetition not allowed.");
@@ -165,7 +174,7 @@ public class BinarySearchTree<Item> {
         }
     }
 
-    public void deleteItem(Node<Item> node) {
+    private void deleteItem(Node<Item> node) {
         if(node.isExternal()) {
             if(node.getParent() != null)
                 if(node.isLeftChild())
@@ -270,9 +279,22 @@ public class BinarySearchTree<Item> {
 
     public void changeData(int k, Item newData) {
         try {
+            if(contains(k, newData))
+                throw new IllegalArgumentException("Pre-existing node with same information.");
             getNode(k).setData(newData);
         }
-        catch(NullPointerException e) {
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void changeData(int k, Item oldData, Item newData) {
+        try {
+            if(contains(k, newData))
+                throw new IllegalArgumentException("Pre-existing node with same information.");
+            getNode(k, oldData).setData(newData);
+        }
+        catch(Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -280,6 +302,14 @@ public class BinarySearchTree<Item> {
     public Node<Item> getInorderSuccessor(int k) throws Exception{
         if(contains(k)) {
             Node<Item> temp = getNode(k);
+            return getInorderSuccessor(temp);
+        }
+        throw new NullPointerException("No such node present in the tree.");
+    }
+
+    public Node<Item> getInorderSuccessor(int k, Item data) throws Exception{
+        if(contains(k, data)) {
+            Node<Item> temp = getNode(k, data);
             return getInorderSuccessor(temp);
         }
         throw new NullPointerException("No such node present in the tree.");
@@ -307,6 +337,14 @@ public class BinarySearchTree<Item> {
     public Node<Item> getInorderPredecessor(int k) throws Exception {
         if(contains(k)) {
             Node<Item> temp = getNode(k);
+            return getInorderSuccessor(temp);
+        }
+        throw new NullPointerException("No such node present in the tree.");
+    }
+
+    public Node<Item> getInorderPredecessor(int k, Item data) throws Exception {
+        if(contains(k, data)) {
+            Node<Item> temp = getNode(k, data);
             return getInorderSuccessor(temp);
         }
         throw new NullPointerException("No such node present in the tree.");
