@@ -127,6 +127,8 @@ public class BinarySearchTree<Item> {
     }
 
     public void addItem(int k, Item e) {
+        if(contains(k, e))
+            throw new IllegalArgumentException("Node repetition not allowed.");
         if(isEmpty()) {
             root = new Node<Item>(k, e, null);
         }
@@ -147,6 +149,10 @@ public class BinarySearchTree<Item> {
 
     public void deleteItem(int k) {
         deleteItem(getNode(k));
+    }
+
+    public void deleteItem(int k, Item data) {
+        deleteItem(getNode(k, data));
     }
 
     public void deleteItem(Node<Item> node) {
@@ -197,6 +203,19 @@ public class BinarySearchTree<Item> {
             return true;
         try {
             return (leftSubTree().contains(k) || rightSubTree().contains(k));
+        }
+        catch(Exception e) {
+            return false;
+        }
+    }
+
+    public boolean contains(int k, Item data) {
+        if(!contains(k))
+            return false;
+        if((root.key() == k)&&(root.data() == data))
+            return true;
+        try {
+            return (leftSubTree().contains(k, data) || rightSubTree().contains(k, data));
         }
         catch(Exception e) {
             return false;
@@ -413,5 +432,18 @@ public class BinarySearchTree<Item> {
             System.out.print("     ");
         System.out.println("("+root.key()+", "+root.data()+")");
         rightSubTree().Inorder(space+2);
+    }
+
+    public void BreadthFirstTraversal() {
+        GenericLinkedListQueue<Node<Item>> nodeQueue = new GenericLinkedListQueue<>();
+        nodeQueue.enqueue(root);
+        while(!nodeQueue.isEmpty()) {
+            Node<Item> temp = nodeQueue.dequeue();
+            if(temp.hasLeft())
+                nodeQueue.enqueue(temp.getLeft());
+            if(temp.hasRight())
+                nodeQueue.enqueue(temp.getRight());
+            System.out.println(temp);
+        }
     }
 }
