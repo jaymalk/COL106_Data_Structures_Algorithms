@@ -200,6 +200,30 @@ public class AVLTree<Item> {
         }
     }
 
+    public int nodeDepth(Node<Item> n) {
+        if(n == null)
+            return -1;
+        return 1+nodeDepth(n.getParent());
+    }
+
+    public void nodeDepth(int k) {
+        if(contains(k)) {
+            System.out.println(nodeDepth(getNode(k)));
+        }
+        else {
+            System.out.println("Node with key: "+k+" doesn't exist in the tree");
+        }
+    }
+
+    public void nodeDepth(int k, Item data) {
+        if(contains(k, data)) {
+            System.out.println(nodeDepth(getNode(k, data)));
+        }
+        else {
+            System.out.println("Node with key: "+k+" doesn't exist in the tree");
+        }
+    }
+
     public void addNewElement(int k, Item e) {
         try {
             addItem(k, e);
@@ -271,6 +295,9 @@ public class AVLTree<Item> {
         else if(node.isInternal()) {
             try {
                 Node<Item> temp = getInorderPredecessor(node);
+                Node<Item> succ = getInorderSuccessor(node);
+                if(nodeDepth(succ) > nodeDepth(temp))
+                    temp = succ;
                 node.setData(temp.data());
                 node.changeKey(temp.key());
                 deleteItem(temp);
