@@ -140,7 +140,7 @@ class BinarySearchTree:
         while temp.has_right():
             temp = temp.get_right()
         return temp
-    def get_mint(self):
+    def get_min(self):
         """Return the item with smallest key."""
         temp = self._root
         while temp.has_left():
@@ -150,6 +150,8 @@ class BinarySearchTree:
         """Add item to the tree, keeping in mind the BST property."""
         if self.is_empty():
             self._root = BinarySearchTree.Node(key, data)
+        if self.contains(key, data):
+            raise Exception('Node already exists')
         elif self._root.get_key() >= key:
             if not self._root.has_left():
                 new = BinarySearchTree.Node(key, data)
@@ -225,12 +227,14 @@ class BinarySearchTree:
     def get_root(self):
         """Return the root of the tree."""
         return self._root
-    def contains(self, key):
+    def contains(self, key, data=None):
         """Tell whether there exists a node (with a particular key) in the tree."""
         if self.is_empty():
             return False
         if self._root.get_key() == key:
-            return True
+            if data is None:
+                return True
+            return self.left_subtree().contains(key, data)
         return self.right_subtree().contains(key) or self.left_subtree().contains(key)
     def get_node(self, key, data=None):
         """Return a specefic node, incase keys are same."""

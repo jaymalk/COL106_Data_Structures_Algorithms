@@ -80,6 +80,10 @@ public class AVLTree<Item> {
             return this.key;
         }
 
+        protected void changeKey(int k) {
+            this.key = k;
+        }
+
         public boolean equals(Node<E> e) {
             return (e.key() == key) && (e.data() == data);
         }
@@ -188,11 +192,18 @@ public class AVLTree<Item> {
     }
 
     public void addNewElement(int k, Item e) {
-        addItem(k, e);
+        try {
+            addItem(k, e);
+        }
+        catch(Exception ex) {
+            System.out.println("Node already exists. Repetition not allowed.");
+        }
         setNewRoot();
     }
 
     private void addItem(int k, Item e) {
+        if(contains(k, e))
+            throw new IllegalArgumentException("Node repetition not allowed.");
         if(isEmpty()) {
             root = new Node<Item>(k, e, null);
         }
@@ -215,7 +226,69 @@ public class AVLTree<Item> {
     }
 
     public void deleteItem(int k) {
-        // NOT NEEDED RIGHT NOW...
+        try {
+            Node<Item> node = getNode(k);
+            deleteItem(node);
+            setNewRoot();
+        }
+        catch(Exception e) {
+            System.out.println("No such node in the tree");
+        }
+    }
+
+    public void deleteItem(int k, Item data) {
+        try {
+            Node<Item> node = getNode(k, data);
+            deleteItem(node);
+            setNewRoot();
+        }
+        catch(Exception e) {
+            System.out.println("No such node in the tree");
+        }
+    }
+
+    private void deleteItem(Node<Item> node) {
+        if(node.isExternal()) {
+            if(node.getParent() != null) {
+                if(node.isLeftChild())
+                    node.getParent().setLeft(null);
+                else
+                    node.getParent().setRight(null);
+                AVLCheck(node.getParent());
+            }
+            else
+                root = null;
+        }
+        else if(node.isInternal()) {
+            try {
+                Node<Item> temp = getInorderPredecessor(node);
+                node.setData(temp.data());
+                node.changeKey(temp.key());
+                deleteItem(temp);
+            }
+            catch(Exception e) {
+                System.out.println("Not possible bruh...");
+            }
+        }
+        else {
+            if(node.hasLeft()) {
+                node.getLeft().setParent(node.getParent());
+                if(node.getParent() != null)
+                    if(node.isLeftChild())
+                        node.getParent().setLeft(node.getLeft());
+                    else
+                        node.getParent().setRight(node.getLeft());
+            }
+            else {
+                node.getRight().setParent(node.getParent());
+                if(node.getParent() != null)
+                    if(node.isLeftChild())
+                        node.getParent().setLeft(node.getRight());
+                    else
+                        node.getParent().setRight(node.getRight());
+            }
+            AVLCheck(node.getParent());
+        }
     }
 
     public boolean contains(int k) {
@@ -225,6 +298,19 @@ public class AVLTree<Item> {
             return true;
         try {
             return (leftSubTree().contains(k) || rightSubTree().contains(k));
+        }
+        catch(Exception e) {
+            return false;
+        }
+    }
+
+    public boolean contains(int k, Item data) {
+        if(!contains(k))
+            return false;
+        if((root.key() == k)&&(root.data() == data))
+            return true;
+        try {
+            return (leftSubTree().contains(k, data) || rightSubTree().contains(k, data));
         }
         catch(Exception e) {
             return false;
@@ -241,6 +327,19 @@ public class AVLTree<Item> {
             return rightSubTree().getNode(k);
         }
         throw new NullPointerException("No node with key "+k+" present in the tree.");
+    }
+
+    private Node<Item> getNode(int k, Item data) {
+        try {
+            Node<Item> node = getNode(k);
+            if(node.data().equals(data))
+                return node;
+            else
+                return new AVLTree<Item>(node.getLeft()).getNode(k, data);
+            }
+        catch(NullPointerException e) {
+            throw new NullPointerException("No node with key "+k+" and data "+data+" present in the tree.");
+        }
     }
 
     // NODE ACCESS OPERATIONS
@@ -428,6 +527,19 @@ public class AVLTree<Item> {
             System.out.print("     ");
         System.out.println("("+root.key()+", "+root.data()+")");
         rightSubTree().Inorder(space+2);
+    }
+
+    public void BreadthFirstTraversal() {
+        GenericLinkedListQueue<Node<Item>> nodeQueue = new GenericLinkedListQueue<>();
+        nodeQueue.enqueue(root);
+        while(!nodeQueue.isEmpty()) {
+            Node<Item> temp = nodeQueue.dequeue();
+            if(temp.hasLeft())
+                nodeQueue.enqueue(temp.getLeft());
+            if(temp.hasRight())
+                nodeQueue.enqueue(temp.getRight());
+            System.out.println(temp);
+        }
     }
 
     private void setNewRoot() {

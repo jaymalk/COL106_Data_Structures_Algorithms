@@ -180,7 +180,7 @@ class AVLTree:
         while temp.has_right():
             temp = temp.get_right()
         return temp
-    def get_mint(self):
+    def get_min(self):
         """Return the item with smallest key."""
         temp = self._root
         while temp.has_left():
@@ -189,6 +189,8 @@ class AVLTree:
     def add_item(self, key, data=None):
         """Add item to the tree, keeping in mind the AVL property."""
         node = AVLTree.Node(key, data)
+        if self.contains(key, data):
+            raise Exception('Node already exists')
         self._add(node)
         self.AVL_check(self.get_node(node.get_key(), node.get_data()).get_parent())
         self._root = self.get_super_tree().get_root()
@@ -284,12 +286,14 @@ class AVLTree:
         if node is None:
             return -1
         return 1 + max(self.node_height(node.get_left()), self.node_height(node.get_right()))
-    def contains(self, key):
+    def contains(self, key, data=None):
         """Tell whether there exists a node (with a particular key) in the tree."""
         if self.is_empty():
             return False
         if self._root.get_key() == key:
-            return True
+            if data is None:
+                return True
+            return self.left_subtree().contains(key, data)
         return self.right_subtree().contains(key) or self.left_subtree().contains(key)
     def get_node(self, key, data=None):
         """Return a specefic node, incase keys are same."""

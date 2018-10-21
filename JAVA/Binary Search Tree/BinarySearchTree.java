@@ -148,11 +148,21 @@ public class BinarySearchTree<Item> {
     }
 
     public void deleteItem(int k) {
-        deleteItem(getNode(k));
+        try {
+            deleteItem(getNode(k));
+        }
+        catch(Exception e) {
+            System.out.println("No such node in the tree.");
+        }
     }
 
     public void deleteItem(int k, Item data) {
-        deleteItem(getNode(k, data));
+        try {
+            deleteItem(getNode(k, data));
+        }
+        catch(Exception e) {
+            System.out.println("No such node in the tree.");
+        }
     }
 
     public void deleteItem(Node<Item> node) {
