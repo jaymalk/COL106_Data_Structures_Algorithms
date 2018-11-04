@@ -32,41 +32,34 @@ public class HeapSortArray {
     }
 
     private static void check(int i, int[] array, int max_range) {
-        if(2*i+2 < max_range) {
+        if(2*i+2 < max_range)
             if(array[2*i+1]<array[2*i+2]) {
-                if(array[2*i+2]>array[i]) {
-                    int temp = array[i];
-                    array[i] = array[2*i+2];
-                    array[2*i+2] = temp;
+                if(array[2*i+2]>array[i])
+                    swap(2*i+2, i, array);
                     check(2*i+2, array, max_range);
-                }
             }
             else {
-                if(array[2*i+1]>array[i]) {
-                    int temp = array[i];
-                    array[i] = array[2*i+1];
-                    array[2*i+1] = temp;
+                if(array[2*i+1]>array[i])
+                    swap(2*i+1, i, array);
                     check(2*i+1, array, max_range);
-                }
             }
-        }
-        else if (2*i+1 < max_range) {
-            if(array[2*i+1]>array[i]) {
-                int temp = array[i];
-                array[i] = array[2*i+1];
-                array[2*i+1] = temp;
+        else if (2*i+1 < max_range)
+            if(array[2*i+1]>array[i])
+                swap(i, 2*i+1, array);
                 check(2*i+1, array, max_range);
-            }
-        }
+    }
+
+    public static void swap(int pos1, int pos2, int[] array) {
+        int temp = array[pos1];
+        array[pos1] = array[pos2];
+        array[pos2] = temp;
     }
 
     public static void heapSort(int[] array) {
         int cap = array.length;
         while(cap!=0) {
             cap--;
-            int temp = array[0];
-            array[0] = array[cap];
-            array[cap] = temp;
+            swap(0, cap, array);
             check(0, array, cap);
         }
     }
