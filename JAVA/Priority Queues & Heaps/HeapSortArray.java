@@ -34,19 +34,22 @@ public class HeapSortArray {
     private static void check(int i, int[] array, int max_range) {
         if(2*i+2 < max_range)
             if(array[2*i+1]<array[2*i+2]) {
-                if(array[2*i+2]>array[i])
+                if(array[2*i+2]>array[i]) {
                     swap(2*i+2, i, array);
                     check(2*i+2, array, max_range);
+                }
             }
             else {
                 if(array[2*i+1]>array[i])
-                    swap(2*i+1, i, array);
+                    swap(2*i+1, i, array); {
                     check(2*i+1, array, max_range);
+                }
             }
         else if (2*i+1 < max_range)
-            if(array[2*i+1]>array[i])
+            if(array[2*i+1]>array[i]) {
                 swap(i, 2*i+1, array);
                 check(2*i+1, array, max_range);
+            }
     }
 
     public static void swap(int pos1, int pos2, int[] array) {

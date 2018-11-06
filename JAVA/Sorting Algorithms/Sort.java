@@ -2,12 +2,16 @@
 import java.util.Random;
 
 public class Sort {
+
+    // SWAPPING OF ELEMENTS IN AN ARRAY
     private static <X extends Comparable<X>> void swap(int pos1, int pos2, X[] items) {
         X temp = items[pos1];
         items[pos1] = items[pos2];
         items[pos2] = temp;
     }
 
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // SELECTION SORT ALGORITHM (NATURAL)
     public static <X extends Comparable<X>> X[] selectionSort(X[] items) {
         for(int i=0; i<items.length; i++) {
             X item = items[i];
@@ -24,26 +28,30 @@ public class Sort {
         return items;
     }
 
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // INSERTION SORT ALGORITHM (NATURAL)
     public static <X extends Comparable<X>> X[] insertionSort(X[] items) {
         for(int i=0; i<items.length; i++) {
-            int pos = i;
+            int j;
             X item = items[i];
-            boolean flag = false;
-            for(int j=0; j<pos; j++) {
-                if(flag) {
-                    items[i] = items[j];
-                    items[j] = item;
+            for(j=0; j<i; j++)
+                if(items[j].compareTo(item)>0) {
+                    item = items[j];
+                    items[j] = items[i];
+                    items[i] = item;
+                    break;
                 }
-                if(items[j].compareTo(item)>0 && !flag) {
-                    items[i] = items[j];
-                    items[j] = item;
-                    flag = true;
-                }
+            while(j++<i) {
+                item = items[j];
+                items[j] = items[i];
+                items[i] = item;
             }
         }
         return items;
     }
 
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // BUBBLE SORT ALGORITHM (NATURAL)
     public static <X extends Comparable<X>> X[] bubbleSort(X[] items) {
         for(int i = items.length-1; i>0; i--) {
             for(int j=0; j<i; j++) {
@@ -55,6 +63,8 @@ public class Sort {
         return items;
     }
 
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // QUICK SORT ALGORITHM (USES LAST ELEMENT AS PIVOT)
     public static <X extends Comparable<X>> X[] quickSort(X[] items) {
         quickSort(items, 0, items.length-1);
         return items;
@@ -68,6 +78,7 @@ public class Sort {
         quickSort(items, pos+1, right);
     }
 
+    // PARTITIONING FOR QUICK SORT USIGN LAST ELEMENT AS PIVOT
     private static <X extends Comparable<X>> int partition(X[] items, int left, int right) {
         X pivot = items[right];
         int l = left-1, r = right;
@@ -84,6 +95,8 @@ public class Sort {
         return l;
     }
 
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // MERGE SORT ALGORITHM (TENTATIVE NATURAL)
     public static <X extends Comparable<X>> X[] mergeSort(X[] items) {
         mergeSort(items, 0, items.length-1);
         return items;
@@ -97,6 +110,7 @@ public class Sort {
         merge(items, left, (left+right)/2, right);
     }
 
+    // SORTED ARRAY MERGING USING AUXILARY ARRAY
     @SuppressWarnings("unchecked")
     private static <X extends Comparable<X>> void merge(X[] items, int left, int mid, int right) {
         Object[] aux = new Object[right-left+1];
@@ -119,4 +133,55 @@ public class Sort {
             items[left+i] = (X)aux[i];
         }
     }
+
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // HEAPSORT ALGORITHM (NATURAL, USING BOTTUM UP CONSTRUCTION)
+    public static <X extends Comparable<X>> X[] heapSort(X[] items) {
+        bottomUpHeapify(items);
+        int cap = items.length;
+        while(cap--!=0) {
+            swap(0, cap, items);
+            check(0, items, cap);
+        }
+        return items;
+    }
+
+    // IN-PLACE BOTTUM UP CONSTRUCTION OF HEAP FROM ARRAY
+    private static <X extends Comparable<X>> void bottomUpHeapify(X[] array) {
+        int i = array.length;
+        while((i & (i+1)) != 0)
+            i--;
+        while(i!=-1) {
+            check(i, array);
+            i--;
+        }
+    }
+
+    private static <X extends Comparable<X>> void check(int i, X[] array) {
+        check(i, array, array.length);
+    }
+
+    private static <X extends Comparable<X>> void check(int i, X[] array, int max_range) {
+        if(2*i+2 < max_range)
+            if(array[2*i+1].compareTo(array[2*i+2])<0) {
+                if(array[2*i+2].compareTo(array[i])>0) {
+                    swap(2*i+2, i, array);
+                    check(2*i+2, array, max_range);
+                }
+            }
+            else {
+                if(array[2*i+1].compareTo(array[i])>0) {
+                    swap(2*i+1, i, array);
+                    check(2*i+1, array, max_range);
+                }
+            }
+        else if (2*i+1 < max_range)
+            if(array[2*i+1].compareTo(array[i])>0) {
+                swap(i, 2*i+1, array);
+                check(2*i+1, array, max_range);
+            }
+    }
+
+
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
 }
