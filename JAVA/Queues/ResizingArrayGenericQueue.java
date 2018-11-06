@@ -1,5 +1,5 @@
 public class ResizingArrayGenericQueue<Item> {
-
+  @SuppressWarnings("unchecked")
   Item[] q = (Item[]) new Object[1];
   // UGLY CASTING...  (HELPLESS)
 
@@ -19,6 +19,7 @@ public class ResizingArrayGenericQueue<Item> {
     return item;
   }
 
+  @SuppressWarnings("unchecked")
   public void resize(int new_capacity) {
 
     Item[] copy = (Item[]) new Object[new_capacity];

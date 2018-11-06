@@ -3,6 +3,7 @@ public class ResizingArrayGenericStack<Item> {
   //private Item[] s = new Item[1];
   // JAVA DOESN'T SUPPORT GENERIC ARRAY CREATION
   // SO, WE WILL OPT FOR THE 'UGLY CASTING' BELOW
+  @SuppressWarnings("unchecked")
   private Item[] s = (Item[]) new Object[1];
   // REMEMBER, A GOOD CODE DOESN'T HAVE ANY CASTING !
 
@@ -17,6 +18,7 @@ public class ResizingArrayGenericStack<Item> {
     s[N++] = item;
   }
 
+  @SuppressWarnings("unchecked")
   public void resize(int capacity) {
 
     Item[] copy = (Item[]) new Object[capacity];
