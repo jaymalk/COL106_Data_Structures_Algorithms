@@ -184,4 +184,57 @@ public class Sort {
 
 
     //\\//\\//\\//\\//\\//\\//\\//\\//\\
+    // RADIX SORT USING HEAPS AS BUCKETS MAKING IT STABLE.
+    @SuppressWarnings("unchecked")
+    public static int[] radixSort(int[] array, int max_digits) {
+        queue[] digits = new queue[10];
+        for(int i = 0; i<10; i++)
+            digits[i] = new queue();
+        int div = 1;
+        for(int i=0; i<max_digits; i++) {
+            for(int j=0; j<array.length; j++) {
+                int temp = (array[j]/div);
+                digits[temp%10].enqueue(array[j]);
+            }
+            int pos = 0;
+            for(int j=0; j<10; j++)
+                while(!digits[j].isEmpty())
+                    array[pos++] = digits[j].dequeue();
+            div*=10;
+        }
+        return array;
+    }
+
+    //\\//\\//\\//\\//\\//\\//\\//\\//\\
+}
+
+class queue{
+  private Node last, first;
+
+  private class Node {
+    int item;
+    Node next;
+  }
+
+  public boolean isEmpty() {
+    return first == null;
+  }
+
+  public void enqueue(int item) {
+    Node oldlast = last;
+    last = new Node();
+    last.item = item;
+    last.next = null;
+    if(isEmpty()) first = last;
+    else          oldlast.next = last;
+  }
+
+  public int dequeue() {
+    if(isEmpty())
+      throw new NullPointerException("The Queue is Empty...");
+    int item = first.item;
+    first = first.next;
+    if(isEmpty()) last = null;
+    return item;
+  }
 }
