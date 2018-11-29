@@ -5,22 +5,21 @@ Most of the content is inspired from the course.
 
 I implemented these data structures both in **Python** and **Java**.
 
-Data structures implemented:
+- Data structures implemented:
   - Stacks
   - Queues
   - Priority Queues and Heaps
-  - Skip-Lists
+  - Skip-Lists (Probabilistic and 1-2-3)
   - Trees (Binary)
   - Binary Search Trees
   - AVL Trees
 
-Algorithms implemented:
-  - *Sorting Algorithms*
-     - Selection Sort
-     - Insertion Sort
-     - Bubble Sort
-     - Merge Sort
-     - Heap Sort (Implemented in Heaps)
-     - Quick Sort
-     - Counting Sort/Bucket Sort
-     - Radix Sort
+ - *Sorting Algorithms* Implemented
+    - Selection Sort
+    - Insertion Sort
+    - Bubble Sort
+    - Merge Sort
+    - Heap Sort (Implemented in Heaps)
+    - Quick Sort
+    - Counting Sort/Bucket Sort
+    - Radix Sort
